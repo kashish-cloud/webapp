@@ -32,8 +32,11 @@ jobs:
       DIALECT: ${{ secrets.DIALECT }}
     steps:
       - uses: actions/checkout@v1
+      - name: Capture PostgreSQL Container ID
+        id: postgres-container
+        run: echo "::set-output name=container_id::$(docker ps -q --filter "name=postgres")"
       - name: Display PostgreSQL Container Logs
-        run: docker logs postgres
+        run: docker logs ${{ steps.postgres-container.outputs.container_id }}
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
