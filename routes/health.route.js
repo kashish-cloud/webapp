@@ -8,7 +8,7 @@ const pool = new Pool({
   host: "localhost",
   database: "kashishdesai",
   password: "Flender@1",
-  port: 5433,
+  port: 5432,
 });
 
 // Handle HEAD request
