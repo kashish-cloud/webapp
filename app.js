@@ -17,26 +17,41 @@ app.use("/", userCreationRoutes);
 app.use("/", userRoutes);
 
 // Database connection
-sequelize
-  .authenticate()
-  .then(() => {
+const connectToDatabase = async () => {
+  try {
+    console.log("Connecting to the database...");
+    await sequelize.authenticate();
     console.log("Database connection has been established successfully");
-  })
-  .catch((error) => {
+    await sequelize.sync();
+  } catch (error) {
     console.error("Unable to connect to the database:", error);
-  });
+    throw error;
+  }
+};
 
 // Start the server
-// Synchronize models with the database
-sequelize
-  .sync({ force: true }) // Adjust the options as needed
-  .then(() => {
-    console.log("Database synced successfully");
-    // Start the server after syncing the database
-    app.listen(port, () => {
+const startServer = async () => {
+  try {
+    await connectToDatabase();
+    const server = app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
-  })
-  .catch((error) => {
-    console.error("Error syncing database:", error);
-  });
+
+    // Close the database connection when the server is closed
+    server.on("close", async () => {
+      console.log("Closing database connection");
+      await sequelize.close();
+    });
+
+    return server;
+  } catch (error) {
+    console.error("Error starting the server:", error);
+    throw error;
+  }
+};
+
+// Start the server after syncing the database
+startServer();
+
+// Export the app for testing purposes
+module.exports = { app, startServer };
