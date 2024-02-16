@@ -6,15 +6,11 @@ const { app, startServer } = require("../app");
 
 beforeAll(() => {
   try {
-    //await sequelize.authenticate();
-    //await sequelize.sync();
     // Start the server after syncing the database
     server = app.listen();
-    //server = await startServer();
-    //await new Promise((resolve) => server.on("listening", resolve));
   } catch (error) {
     console.error("Error connecting to the database:", error);
-    process.exit(1); // Exit the process if there's an error to fail fast
+    process.exit(1);
   }
 });
 
@@ -67,7 +63,6 @@ describe("User Integration Tests", () => {
       .send({
         first_name: "UpdatedJohn",
         last_name: "UpdatedDoe",
-        //password: "updatedPassword123",
       });
 
     // Ensure the user is updated successfully
@@ -93,6 +88,5 @@ describe("User Integration Tests", () => {
 });
 
 afterAll(() => {
-  //await sequelize.close();
   server.close();
 });
