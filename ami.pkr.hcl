@@ -1,12 +1,3 @@
-packer {
-  required_plugins {
-    googlecompute = {
-      version = ">= 1.0.0, < 2.0.0"
-      source  = "github.com/hashicorp/googlecompute"
-    }
-  }
-}
-
 variable "project_id" {
   type    = string
   default = "tf-gcp-infra-project"
@@ -44,7 +35,7 @@ variable "disk_size" {
 
 variable "zone" {
   type    = string
-  default = "us-east1-a"
+  default = "us-east1-b"
 }
 
 variable "ssh_username" {
@@ -57,12 +48,21 @@ variable "ssh_private_key_file" {
   default = "/Users/kashishdesai/Downloads/tf-gcp-infra-project-b207c7f5b113.json"
 }
 
+packer {
+  required_plugins {
+    googlecompute = {
+      version = ">= 1.1.4"
+      source  = "github.com/hashicorp/googlecompute"
+    }
+  }
+}
+
 source "googlecompute" "centos-stream-8" {
-  project_id   = var.project_id
-  image_family = var.image_family
-  image_project = var.image_project
+  project_id          = var.project_id
+  image_family        = var.image_family
   source_image_family = var.image_family
-  source_image_project = var.image_project
+  ssh_username        = var.ssh_username
+  zone                = var.zone 
 }
 
 build {
@@ -71,19 +71,4 @@ build {
   provisioner "shell" {
     script = "script.sh"
   }
-
-  builders = [
-    {
-      type        = "googlecompute"
-      project_id  = var.project_id
-      image_family = var.custom_image_family
-      image_name   = var.custom_image_name
-      image_description = "Custom image for CSYE 6225 assignment"
-      machine_type = var.machine_type
-      disk_size    = var.disk_size
-      zone         = var.zone
-      ssh_username = var.ssh_username
-      ssh_private_key_file = var.ssh_private_key_file
-    }
-  ]
 }
