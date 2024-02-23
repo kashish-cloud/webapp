@@ -1,0 +1,107 @@
+name: Build Packer on Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-packer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Echo Message
+        run: echo "Push event detected on the main branch."
+
+      - name: Set up Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: "latest"
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: "latest"
+
+      - name: Packer init
+        run: packer init ami.pkr.hcl
+
+      - name: create and configure
+        run: |
+          touch .env
+          echo DBPORT=${{ secrets.DBPORT }} >> .env
+          echo PORT=${{ secrets.PORT }} >> .env
+          echo DIALECT=${{ secrets.DIALECT }} >> .env
+          echo DBUSER=${{ secrets.DBUSER }} >> .env
+          echo DBPASSWORD=${{ secrets.DBPASSWORD }}>> .env
+          echo DBNAME=${{ secrets.DBNAME }} >> .env
+
+      - name: Build Artifact
+        run: zip -r webapp.zip . -x ".git*" -x ".github*"
+
+      - name: Publish Web App Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: webapp
+          path: webapp.zip
+
+      - name: check path
+        run: |
+          pwd
+          ls /home/runner/work/webapp/webapp
+
+      - name: Build Image on GCP
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          IMAGE_FAMILY: "centos-stream-8"
+          IMAGE_PROJECT: "centos-cloud"
+          CUSTOM_IMAGE_FAMILY: "csye6225-custom-image-family"
+          CUSTOM_IMAGE_NAME: "csye6225-custom-image"
+          MACHINE_TYPE: "n1-standard-2"
+          DISK_SIZE: "100"
+          ZONE: "us-east1-a"
+          SSH_USERNAME: "csye6225"
+          SSH_PRIVATE_KEY_FILE: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          packer build -var "project_id=${PROJECT_ID}" -var "image_family=${IMAGE_FAMILY}" -var "image_project=${IMAGE_PROJECT}" \
+                       -var "custom_image_family=${CUSTOM_IMAGE_FAMILY}" -var "custom_image_name=${CUSTOM_IMAGE_NAME}" \
+                       -var "machine_type=${MACHINE_TYPE}" -var "disk_size=${DISK_SIZE}" -var "zone=${ZONE}" \
+                       -var "ssh_username=${SSH_USERNAME}" -var "ssh_private_key_file=${SSH_PRIVATE_KEY_FILE}" \
+                       ami.pkr.hcl
+
+      - name: Display Artifact
+        run: cat manifest.json
+
+      - name: Get Image Family and Project
+        id: get-image-info
+        run: |
+          IMAGE_INFO=$(gcloud compute images describe csye6225-custom-image --format="value(imageFamily,project)")
+          echo "IMAGE_INFO=$IMAGE_INFO" >> $GITHUB_ENV
+        shell: bash
+
+      - name: Share Image with DEMO account
+        env:
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+          DEMO_PROJECT: ${{ secrets.DEMO_PROJECT_ID }}
+        run: |
+          IFS=' ' read -r -a arr <<< "$IMAGE_INFO"
+          gcloud compute images add-iam-policy-binding csye6225-custom-image \
+            --member="user:${{ secrets.DEMO_ACCOUNT_EMAIL }}" \
+            --role="roles/compute.imageUser" \
+            --project=${arr[1]}
+        shell: bash
+
+      - name: Configure GCP credentials for demo account
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: "latest"
+          service_account_email: ${{ secrets.DEMO_ACCOUNT_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY_DEMO }}
+          project_id: ${{ secrets.DEMO_PROJECT_ID }}
