@@ -43,11 +43,6 @@ variable "ssh_username" {
   default = "csye6225"
 }
 
-variable "ssh_private_key_file" {
-  type    = string
-  default = "/Users/kashishdesai/Downloads/tf-gcp-infra-project-b207c7f5b113.json"
-}
-
 packer {
   required_plugins {
     googlecompute = {
