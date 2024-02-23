@@ -99,7 +99,7 @@ jobs:
         shell: bash
 
       - name: Configure GCP credentials for demo account
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@v1
         with:
           version: "latest"
           service_account_email: ${{ secrets.DEMO_ACCOUNT_EMAIL }}
