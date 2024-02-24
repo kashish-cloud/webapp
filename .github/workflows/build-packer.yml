@@ -86,9 +86,6 @@ jobs:
                        -var "ssh_username=${SSH_USERNAME}"\
                        ami.pkr.hcl
 
-      - name: Display Artifact
-        run: cat manifest.json
-
       - name: Get Image Family and Project
         id: get-image-info
         run: |
