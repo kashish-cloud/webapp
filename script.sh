@@ -1,4 +1,7 @@
 #!/bin/bash
+set -x
+exec > >(tee -i /var/log/script.log)
+exec 2>&1
 
 # Ensure the script is run as root
 if [[ $EUID -ne 0 ]]; then
