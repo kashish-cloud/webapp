@@ -77,7 +77,7 @@ jobs:
           CUSTOM_IMAGE_NAME: "csye6225-custom-image"
           MACHINE_TYPE: "n1-standard-2"
           DISK_SIZE: "100"
-          ZONE: "us-east1-a"
+          ZONE: "us-east1-b"
           SSH_USERNAME: "csye6225"
         run: |
           packer build -var "project_id=${PROJECT_ID}" -var "image_family=${IMAGE_FAMILY}" -var "image_project=${IMAGE_PROJECT}" \
