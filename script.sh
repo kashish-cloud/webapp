@@ -38,4 +38,4 @@ cd /opt
 sudo yum install -y unzip
 
 # Unzip the zip file
-sudo unzip Kashish_Desai_002795337_04.zip
+sudo unzip webapp.zip
