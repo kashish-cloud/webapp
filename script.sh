@@ -34,10 +34,10 @@ echo "Installation completed!"
 # Navigate to /opt directory
 cd /opt
 
-zip webapp.zip webapp-fork
+#zip webapp.zip webapp-fork
 
 # Install unzip
 sudo yum install -y unzip
 
 # Unzip the zip file
-sudo unzip webapp.zip
+sudo unzip /tmp/webapp.zip
