@@ -40,4 +40,4 @@ cd /opt
 sudo yum install -y unzip
 
 # Unzip the zip file
-sudo unzip /tmp/webapp.zip
+sudo unzip -o /tmp/webapp.zip
