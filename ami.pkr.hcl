@@ -5,7 +5,7 @@ variable "project_id" {
 
 variable "image_family" {
   type    = string
-  default = "centos-stream-8"
+  default = "centos-stream-8
 }
 
 variable "image_project" {
