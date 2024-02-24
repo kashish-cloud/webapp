@@ -63,7 +63,15 @@ source "googlecompute" "centos-stream-8" {
 build {
   sources = ["source.googlecompute.centos-stream-8"]
 
+  provisioner "file" {
+    source      = "./script.sh"
+    destination = "/tmp/script.sh"
+  }
+
   provisioner "shell" {
-    script = "script.sh"
+    inline = [
+      "chmod +x /tmp/script.sh",
+      "/tmp/script.sh"
+    ]
   }
 }
