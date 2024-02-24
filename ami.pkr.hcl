@@ -68,6 +68,11 @@ build {
     destination = "/tmp/script.sh"
   }
 
+  provisioner "file" {
+    source      = "./webapp.zip"
+    destination = "/tmp/webapp.zip"
+  }
+
   provisioner "shell" {
     inline = [
       "chmod +x /tmp/script.sh",
