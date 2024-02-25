@@ -52,7 +52,7 @@ source "googlecompute" "centos-stream-8" {
   image_family        = var.image_family
   source_image_family = var.image_family
   zone                = var.zone
-  ssh_username        = "abcd"
+  ssh_username        = "packer"
 }
 
 build {
@@ -65,7 +65,7 @@ build {
 
   provisioner "file" {
     source      = "./webapp.zip"
-    destination = "/tmp/webapp.zip"
+    destination = "/tmp/"
   }
 
   provisioner "shell" {
