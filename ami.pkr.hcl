@@ -52,6 +52,7 @@ source "googlecompute" "centos-stream-8" {
   image_family        = var.image_family
   source_image_family = var.image_family
   zone                = var.zone
+  ssh_username        = "abcd"
 }
 
 build {
