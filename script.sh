@@ -41,7 +41,7 @@ sudo useradd -g csye6225 -s /usr/sbin/nologin csye6225
 
 sudo mkdir -p /opt/webapp/
 
-sudo chown -R csye6225:csye6225 /opt/webapp/app.js
+sudo chown -R csye6225:csye6225 /opt/webapp
 
 # Install unzip
 sudo yum install -y unzip
