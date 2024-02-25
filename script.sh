@@ -34,10 +34,9 @@ echo "Installation completed!"
 # Navigate to /opt directory
 cd /opt
 
+# sudo useradd -g csye6225 -s /usr/sbin/nologin csye6225
 
-
-sudo groupadd csye6225
-sudo useradd -g csye6225 -s /usr/sbin/nologin csye6225
+sudo usermod -s /usr/sbin/nologin csye6225
 
 sudo mkdir -p /opt/webapp/
 
