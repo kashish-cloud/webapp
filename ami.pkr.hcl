@@ -60,7 +60,7 @@ build {
 
   provisioner "file" {
     source      = "./script.sh"
-    destination = "/tmp/script.sh"
+    destination = "/tmp/"
   }
 
   provisioner "file" {
