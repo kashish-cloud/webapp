@@ -34,10 +34,23 @@ echo "Installation completed!"
 # Navigate to /opt directory
 cd /opt
 
-#zip webapp.zip webapp-fork
+
+
+sudo groupadd csye6225
+sudo useradd -g csye6225 -s /usr/sbin/nologin csye6225
+
+sudo mkdir -p /opt/webapp/
+
+sudo chown -R csye6225:csye6225 /opt/webapp/app.js
 
 # Install unzip
 sudo yum install -y unzip
 
 # Unzip the zip file
-sudo unzip -o /tmp/webapp.zip
+sudo unzip -o /tmp/webapp.zip -d /opt/webapp
+
+sudo mv /opt/webapp/kas.service /etc/systemd/system/kas.service
+
+sudo systemctl daemon-reload
+
+sudo systemctl enable kas.service
