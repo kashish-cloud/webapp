@@ -38,6 +38,11 @@ variable "zone" {
   default = "us-east1-b"
 }
 
+variable "ssh_username" {
+  type    = string
+  default = "csye6225"
+}
+
 packer {
   required_plugins {
     googlecompute = {
@@ -51,8 +56,8 @@ source "googlecompute" "centos-stream-8" {
   project_id          = var.project_id
   image_family        = var.image_family
   source_image_family = var.image_family
+  ssh_username        = var.ssh_username
   zone                = var.zone
-  ssh_username        = "packer"
 }
 
 build {
