@@ -25,11 +25,13 @@ PG_HBA_CONF="/var/lib/pgsql/data/pg_hba.conf"
 
 if [ -f "$PG_HBA_CONF" ]; then
     # Use sed to replace "ident" and "peer" with "md5" in the file
-    sed -i 's/ident/md5/g; s/peer/md5/g' "$PG_HBA_CONF"
+    sudo sed -i 's/ident/md5/g; s/peer/md5/g' "$PG_HBA_CONF"
     echo "pg_hba.conf updated successfully."
 else
     echo "Error: pg_hba.conf not found at $PG_HBA_CONF."
 fi
+
+sudo systemctl restart postgresql
 
 # Install Node.js and npm
 sudo yum install -y nodejs npm
