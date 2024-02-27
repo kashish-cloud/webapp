@@ -2,7 +2,7 @@
 
 ## Overview
 
-This web application provides a robust backend service with RESTful APIs for user management. It follows best practices for security, authentication, and database management. Below are the key features and requirements implemented in the application:
+This web application provides a robust backend service with RESTful APIs for user management. It follows best practices for security, authentication, and database management.Below are the key features and requirements implemented in the application:
 
 ### Bootstrapping Database
 
