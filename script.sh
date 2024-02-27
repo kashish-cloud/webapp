@@ -31,8 +31,6 @@ else
     echo "Error: pg_hba.conf not found at $PG_HBA_CONF."
 fi
 
-sudo systemctl restart postgresql
-
 # Install Node.js and npm
 sudo yum install -y nodejs npm
 
