@@ -9,7 +9,7 @@ variable "image_family" {
 }
 
 variable "image_project" {
-  type    = string
+  type       = string
   default = "centos-cloud"
 }
 
