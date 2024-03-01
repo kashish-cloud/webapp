@@ -8,26 +8,11 @@ fi
 # Update and Upgrade System (for CentOS)
 sudo yum update -y
 
-# Install PostgreSQL
-sudo yum install -y postgresql-server postgresql-contrib
-
-# Initialize and start PostgreSQL
-sudo postgresql-setup --initdb
-sudo systemctl start postgresql
-sudo systemctl enable postgresql
-
-# Set PostgreSQL password and create database
-sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'Flender@1';"
-sudo -u postgres createdb kashishdesai
-
-sudo sed -i 's/ident/md5/g; s/peer/md5/g' /var/lib/pgsql/data/pg_hba.conf
-
 # Install Node.js and npm
 sudo yum install -y nodejs npm
 
 # Verify installations
 echo "Verifying installations...."
-sudo psql --version
 sudo node --version
 sudo npm --version
 
