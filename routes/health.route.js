@@ -4,11 +4,11 @@ const { Pool } = require("pg");
 const router = express.Router();
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "kashishdesai",
-  password: "Flender@1",
-  port: 5432,
+  user: process.env.DBUSER,
+  host: process.env.HOST,
+  database: process.env.DBNAME,
+  password: process.env.DBPASSWORD,
+  port: process.env.DBPORT,
 });
 
 // Handle HEAD request
