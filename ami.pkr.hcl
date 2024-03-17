@@ -76,12 +76,7 @@ build {
   provisioner "shell" {
     inline = [
       "chmod +x /tmp/script.sh",
-      "/tmp/script.sh",
-      "curl -sSO https://dl.google.com/cloudagents/add-monitoring-agent-repo.sh",
-      "sudo bash add-monitoring-agent-repo.sh",
-      "sudo yum install -y stackdriver-agent",
-      "sudo systemctl enable stackdriver-agent",
-      "sudo systemctl start stackdriver-agent"
+      "/tmp/script.sh"
     ]
   }
 }
