@@ -19,8 +19,8 @@ sudo npm --version
 echo "Installation completed!"
 
 # Set file permissions for /var/log/webapp/ directory
-mkdir -p /var/log/webapp/
-chown -R csye6225:csye6225 /var/log/webapp/
+sudo mkdir -p /var/log/webapp/
+sudo chown -R csye6225:csye6225 /var/log/webapp/
 
 # Navigate to /opt directory
 cd /opt
@@ -46,7 +46,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable kas.service
 
 # Copy config.yaml to the right destination
-cp ~/config.yaml /etc/google-cloud-ops-agent/config.yaml
+sudo cp ~/config.yaml /etc/google-cloud-ops-agent/config.yaml
 
 # Restart Ops Agent
-systemctl restart google-cloud-ops-agent
+sudo systemctl restart google-cloud-ops-agent
