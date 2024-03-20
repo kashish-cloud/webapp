@@ -1,6 +1,7 @@
 const request = require("supertest");
 const sequelize = require("../db/connection");
 const { app, startServer } = require("../app");
+const logger = require("../logger.js");
 
 //let server;
 
@@ -9,7 +10,7 @@ beforeAll(() => {
     // Start the server after syncing the database
     server = app.listen();
   } catch (error) {
-    console.error("Error connecting to the database:", error);
+    logger.error("Error connecting to the database:", error);
     process.exit(1);
   }
 });

@@ -4,6 +4,7 @@ const healthRoutes = require("./routes/health.route");
 const userCreationRoutes = require("./routes/userCreation.route");
 const userRoutes = require("./routes/user.route");
 const sequelize = require("./db/connection");
+const logger = require("./logger.js");
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -19,12 +20,12 @@ app.use("/", userRoutes);
 // Database connection
 const connectToDatabase = async () => {
   try {
-    console.log("Connecting to the database...");
+    logger.info("Connecting to the database...");
     await sequelize.authenticate();
-    console.log("Database connection has been established successfully");
+    logger.info("Database connection has been established successfully");
     await sequelize.sync();
   } catch (error) {
-    console.error("Unable to connect to the database:", error);
+    logger.error("Unable to connect to the database:", error);
     throw error;
   }
 };
@@ -34,18 +35,18 @@ const startServer = async () => {
   try {
     await connectToDatabase();
     const server = app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
+      logger.info(`Server is running on port ${port}`);
     });
 
     // Close the database connection when the server is closed
     server.on("close", async () => {
-      console.log("Closing database connection");
+      logger.info("Closing database connection");
       await sequelize.close();
     });
 
     return server;
   } catch (error) {
-    console.error("Error starting the server:", error);
+    logger.error("Error starting the server:", error);
     throw error;
   }
 };
