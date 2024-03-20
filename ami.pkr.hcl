@@ -64,6 +64,11 @@ build {
   sources = ["source.googlecompute.centos-stream-8"]
 
   provisioner "file" {
+    source      = "./config.yaml"
+    destination = "~/config.yaml"
+  }
+
+  provisioner "file" {
     source      = "./script.sh"
     destination = "/tmp/"
   }

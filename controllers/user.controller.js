@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+const logger = require("../logger.js");
 
 const userController = {
   // Creating a new user
@@ -10,6 +11,7 @@ const userController = {
       // Checking if the user already exists
       const existingUser = await User.findOne({ where: { username } });
       if (existingUser) {
+        logger.error("User creation failed: User already exists", { username });
         return res.status(400).json({ message: "User already exists" });
       }
 
@@ -22,6 +24,7 @@ const userController = {
       });
 
       // Responding with the created user details excluding the password
+      logger.info("User created successfully", { id: newUser.id, username });
       return res.status(201).json({
         id: newUser.id,
         first_name: newUser.first_name,
@@ -31,7 +34,7 @@ const userController = {
         account_updated: newUser.account_updated,
       });
     } catch (error) {
-      console.error("Error creating user:", error);
+      logger.error("Error creating user", { error: error.message });
       return res
         .status(500)
         .json({ message: "Internal server error", error: error.message });
@@ -42,7 +45,7 @@ const userController = {
   getSelf: async (req, res) => {
     try {
       if (!req.user) {
-        console.error("No user found in req");
+        logger.error("No user found in request");
         return res.status(401).json({ message: "Unauthorized" });
       }
 
@@ -58,13 +61,17 @@ const userController = {
       });
 
       if (!user) {
-        console.error("User not found");
+        logger.error("User not found");
         return res.status(404).json({ message: "User not found" });
       }
 
+      logger.info("User details retrieved successfully", {
+        id: user.id,
+        username: user.username,
+      });
       return res.json(user);
     } catch (error) {
-      console.error("Internal server error:", error);
+      logger.error("Internal server error:", { error: error.message });
       return res.status(500).json({ message: "Internal server error" });
     }
   },
@@ -74,20 +81,20 @@ const userController = {
     const { first_name, last_name, password, username } = req.body;
 
     try {
-      console.log("Update Self Controller: Started");
+      logger.info("Update Self Controller: Started");
 
       // Log received request body
-      console.log("Received Request Body:", req.body);
+      logger.debug("Received Request Body:", req.body);
 
       const user = await User.findByPk(req.user.id);
 
       if (!user) {
-        console.log("User not found");
+        logger.error("User not found");
         return res.status(404).json({ message: "User not found" });
       }
 
       // Log current user information before update
-      console.log("Current User Information:", user.toJSON());
+      logger.debug("Current User Information:", user.toJSON());
 
       // Update user information
       if (first_name) {
@@ -104,7 +111,7 @@ const userController = {
 
       // Checking if username is present in the request body
       if (username) {
-        console.log("Attempt to update username detected");
+        logger.error("Attempt to update username detected");
         return res
           .status(400)
           .json({ message: "Cannot update the 'username' field" });
@@ -113,11 +120,15 @@ const userController = {
       await user.save();
 
       // Log updated user information
-      console.log("Updated User Information:", user.toJSON());
+      logger.debug("Updated User Information:", user.toJSON());
 
+      logger.info("User information updated successfully", {
+        id: user.id,
+        username: user.username,
+      });
       return res.status(204).send();
     } catch (error) {
-      console.error("Update Self Controller Error:", error);
+      logger.error("Update Self Controller Error:", { error: error.message });
       return res.status(500).json({ message: "Internal server error" });
     }
   },
