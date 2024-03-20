@@ -64,7 +64,7 @@ build {
   sources = ["source.googlecompute.centos-stream-8"]
 
   provisioner "file" {
-    source      = "./config.yaml"
+    source      = "/home/runner/work/webapp/config.yaml"
     destination = "/tmp/"
   }
 
