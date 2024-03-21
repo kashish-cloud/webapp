@@ -12,12 +12,6 @@ const logger = createLogger({
         format.colorize(),
         format.printf((info) => {
           const { timestamp, level, message, ...meta } = info;
-          const log = {
-            severity: level === "DEFAULT" ? "INFO" : level,
-            message,
-            timestamp,
-            ...meta,
-          };
           return `${timestamp} [${log.severity.toUpperCase()}]: ${log.message}`;
         })
       ),
