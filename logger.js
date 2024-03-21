@@ -12,7 +12,7 @@ const logger = createLogger({
         format.colorize(),
         format.printf((info) => {
           const { timestamp, level, message, ...meta } = info;
-          return `${timestamp} [${log.severity.toUpperCase()}]: ${log.message}`;
+          return `${timestamp} [${level.toUpperCase()}]: ${message}`;
         })
       ),
     }),
