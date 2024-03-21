@@ -48,5 +48,7 @@ sudo systemctl enable kas.service
 # Copy config.yaml to the right destination
 sudo mv /tmp/config.yaml /etc/google-cloud-ops-agent/config.yaml
 
+sleep 20
+
 # Restart Ops Agent
 sudo systemctl restart google-cloud-ops-agent
