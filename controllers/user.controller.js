@@ -1,6 +1,9 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const logger = require("../logger.js");
+const { PubSub } = require("@google-cloud/pubsub");
+
+const pubSubClient = new PubSub();
 
 const userController = {
   // Creating a new user
@@ -22,6 +25,24 @@ const userController = {
         password,
         username,
       });
+
+      // Publish a message to the 'verify_email' topic in Pub/Sub
+      const messageData = {
+        userId: newUser.id,
+        username: newUser.username,
+      };
+
+      const messageAttributes = {};
+
+      //const dataBuffer = Buffer.from(JSON.stringify(messageData));
+      //await pubSubClient.topic("verify_email").publish(dataBuffer);
+
+      const messageId = await pubSubClient
+        .topic("verify_email")
+        .publishMessage({
+          data: Buffer.from(JSON.stringify(messageData)),
+          attributes: messageAttributes,
+        });
 
       // Responding with the created user details excluding the password
       logger.info("User created successfully", { id: newUser.id, username });
@@ -129,6 +150,40 @@ const userController = {
       return res.status(204).send();
     } catch (error) {
       logger.error("Update Self Controller Error:", { error: error.message });
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  },
+
+  // Get user verification status and token expiry time
+  getVerificationStatus: async (req, res) => {
+    try {
+      // Assuming you have a middleware to authenticate the user,
+      // you can access the user ID from req.user.id
+      const userId = req.user.id;
+
+      // Fetch user from the database
+      const user = await User.findByPk(userId);
+
+      if (!user) {
+        logger.error("User not found");
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Check if the user is verified and retrieve verification token expiry time
+      const verificationStatus = {
+        verified: user.verified,
+        verificationTokenExpiry: user.verificationTokenExpiry,
+      };
+
+      logger.info("User verification status retrieved successfully", {
+        id: user.id,
+        username: user.username,
+        verificationStatus,
+      });
+
+      return res.json(verificationStatus);
+    } catch (error) {
+      logger.error("Error getting user verification status:", error.message);
       return res.status(500).json({ message: "Internal server error" });
     }
   },
