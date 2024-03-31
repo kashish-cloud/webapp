@@ -38,7 +38,7 @@ const userController = {
       //await pubSubClient.topic("verify_email").publish(dataBuffer);
 
       const messageId = await pubSubClient
-        .topic("verify_email")
+        .topic("verify-email")
         .publishMessage({
           data: Buffer.from(JSON.stringify(messageData)),
           attributes: messageAttributes,
