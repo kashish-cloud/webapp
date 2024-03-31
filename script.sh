@@ -6,10 +6,13 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Update and Upgrade System (for CentOS)
-sudo yum update -y
+sudo dnf update -y
+
+# Enable Node.js module for version 18
+sudo dnf module enable -y nodejs:18
 
 # Install Node.js and npm
-sudo yum install -y nodejs npm
+sudo dnf install -y nodejs npm
 
 # Verify installations
 echo "Verifying installations...."
@@ -34,7 +37,7 @@ sudo mkdir -p /opt/webapp/
 sudo chown -R csye6225:csye6225 /opt/webapp
 
 # Install unzip
-sudo yum install -y unzip
+sudo dnf install -y unzip
 
 # Unzip the zip file
 sudo unzip -o /tmp/webapp.zip -d /opt/webapp
