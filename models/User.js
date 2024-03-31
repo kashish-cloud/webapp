@@ -30,6 +30,11 @@ const User = sequelize.define(
         isEmail: true,
       },
     },
+    verified: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
     account_created: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
