@@ -30,32 +30,17 @@ const userController = {
         id: newUser.id,
         username,
       });
-      logger.debug("Publishing message using service account:", {
-        serviceAccountEmail: pubSubClient.email,
-      });
 
       // Publish a message to the 'verify_email' topic in Pub/Sub
       const messageData = {
-        userId: newUser.id,
-        username: newUser.username,
+        email: newUser.username,
       };
 
-      const messageAttributes = {};
+      const topicName = "verify-email";
+      const dataBuffer = Buffer.from(JSON.stringify(messageData));
+      await pubSubClient.topic(topicName).publish(dataBuffer);
 
-      //const dataBuffer = Buffer.from(JSON.stringify(messageData));
-      //await pubSubClient.topic("verify_email").publish(dataBuffer);
-
-      const messageId = await pubSubClient
-        .topic("verify-email")
-        .publishMessage({
-          data: Buffer.from(JSON.stringify(messageData)),
-          attributes: messageAttributes,
-        });
-
-      logger.info(
-        "Message published successfully to Pub/Sub with messageId:",
-        messageId
-      );
+      logger.info(`Message published to topic ${topicName}`);
 
       // Responding with the created user details excluding the password
       logger.info("User created successfully", { id: newUser.id, username });
