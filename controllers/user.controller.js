@@ -26,6 +26,14 @@ const userController = {
         username,
       });
 
+      logger.info("New user created successfully:", {
+        id: newUser.id,
+        username,
+      });
+      logger.debug("Publishing message using service account:", {
+        serviceAccountEmail: pubSubClient.email,
+      });
+
       // Publish a message to the 'verify_email' topic in Pub/Sub
       const messageData = {
         userId: newUser.id,
@@ -43,6 +51,11 @@ const userController = {
           data: Buffer.from(JSON.stringify(messageData)),
           attributes: messageAttributes,
         });
+
+      logger.info(
+        "Message published successfully to Pub/Sub with messageId:",
+        messageId
+      );
 
       // Responding with the created user details excluding the password
       logger.info("User created successfully", { id: newUser.id, username });
