@@ -18,12 +18,16 @@ const userController = {
         return res.status(400).json({ message: "User already exists" });
       }
 
+      // Generate verification token
+      //const verificationToken = generateVerificationToken();
+
       // Creating a new user
       const newUser = await User.create({
         first_name,
         last_name,
         password,
         username,
+        verified,
       });
 
       logger.info("New user created successfully:", {
@@ -34,6 +38,7 @@ const userController = {
       // Publish a message to the 'verify_email' topic in Pub/Sub
       const messageData = {
         email: newUser.username,
+        userId: newUser.id,
       };
 
       const topicName = "verify-email";
@@ -51,6 +56,7 @@ const userController = {
         username: newUser.username,
         account_created: newUser.account_created,
         account_updated: newUser.account_updated,
+        verified: newUser.verified,
       });
     } catch (error) {
       logger.error("Error creating user", { error: error.message });
