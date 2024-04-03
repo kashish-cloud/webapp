@@ -3,6 +3,7 @@ const healthRoutes = require("./routes/health.route");
 //const authRoutes = require("./routes/auth.route");
 const userCreationRoutes = require("./routes/userCreation.route");
 const userRoutes = require("./routes/user.route");
+const userVerifyRoutes = require("./routes/userVerify.route");
 const sequelize = require("./db/connection");
 const logger = require("./logger.js");
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", healthRoutes);
 app.use("/", userCreationRoutes);
 app.use("/", userRoutes);
+app.use("/", userVerifyRoutes);
 
 // Database connection
 const connectToDatabase = async () => {

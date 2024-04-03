@@ -9,6 +9,7 @@ const router = express.Router();
 router.get("/v1/user/verify-email", async (req, res) => {
   try {
     const token = req.query.token;
+    console.log("Received token:", token);
 
     // Verify the token (You need to implement this logic)
     const userId = await verifyToken(token);

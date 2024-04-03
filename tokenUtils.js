@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-//const crypto = require("crypto");
 const jwtSecret = "testing";
 
 const verifyToken = async (token) => {
