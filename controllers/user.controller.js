@@ -27,7 +27,7 @@ const userController = {
         last_name,
         password,
         username,
-        verified,
+        verified: false,
       });
 
       logger.info("New user created successfully:", {
