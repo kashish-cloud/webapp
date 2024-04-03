@@ -46,46 +46,4 @@ router.get(
   userController.getVerificationStatus
 );
 
-// Route to handle email verification
-router.get("/v1/user/verify-email", async (req, res) => {
-  try {
-    const token = req.query.token;
-    const userId = req.query.userId;
-
-    // Retrieve user by ID
-    const user = await User.findByPk(userId);
-
-    if (!user) {
-      logger.error("User not found");
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Check if user is already verified
-    if (user.verified) {
-      logger.info("User is already verified");
-      return res.status(200).json({ message: "User is already verified" });
-    }
-
-    // Verify the token (You need to implement this logic)
-    const isTokenValid = await verifyToken(token, userId);
-
-    if (isTokenValid) {
-      // Update user's verification status
-      user.verified = true;
-      await user.save();
-
-      logger.info("User verified successfully");
-      return res.status(200).json({ message: "User verified successfully" });
-    } else {
-      logger.error("Invalid or expired verification token");
-      return res
-        .status(400)
-        .json({ message: "Invalid or expired verification token" });
-    }
-  } catch (error) {
-    logger.error("Error verifying email:", error.message);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
-
 module.exports = router;

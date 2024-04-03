@@ -1,19 +1,19 @@
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
-const jwtSecret = crypto.randomBytes(32).toString("hex");
+//const crypto = require("crypto");
+const jwtSecret = "testing";
 
-const verifyToken = async (token, userId) => {
+const verifyToken = async (token) => {
   try {
     // Verify the token
     const decoded = jwt.verify(token, jwtSecret);
 
     // Check if the token contains the correct user ID
-    if (decoded.userId !== userId) {
+    if (!decoded.userId) {
       return false;
     }
 
     // Token is valid
-    return true;
+    return decoded.userId;
   } catch (error) {
     // Token verification failed (expired, invalid, etc.)
     return false;
