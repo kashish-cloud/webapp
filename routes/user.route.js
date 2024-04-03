@@ -2,6 +2,7 @@ const express = require("express");
 const userController = require("../controllers/user.controller");
 const authenticate = require("../middleware/authenticate");
 const User = require("../models/User");
+const EmailTracking = require("../models/EmailTracking");
 const { verifyToken } = require("../tokenUtils");
 const logger = require("../logger");
 
