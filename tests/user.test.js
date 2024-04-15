@@ -20,7 +20,7 @@ describe("User Integration Tests", () => {
 
   it("should create a user and validate its existence", async () => {
     // Send a POST request to create a user
-    const createResponse = await request(app).post("/v1/user").send({
+    const createResponse = await request(app).post("/v2/user").send({
       first_name: "John",
       last_name: "Doe",
       password: "password123",
@@ -33,7 +33,7 @@ describe("User Integration Tests", () => {
 
     // Send a GET request to retrieve the created user
     const getUserResponse = await request(app)
-      .get(`/v1/user/self`)
+      .get(`/v2/user/self`)
       .set(
         "Authorization",
         "Basic " +
@@ -53,7 +53,7 @@ describe("User Integration Tests", () => {
 
     // Send a PUT request to update the user
     const updateResponse = await request(app)
-      .put(`/v1/user/self`)
+      .put(`/v2/user/self`)
       .set(
         "Authorization",
         "Basic " +
@@ -71,7 +71,7 @@ describe("User Integration Tests", () => {
 
     // Send a GET request to retrieve the updated user
     const getUpdatedUserResponse = await request(app)
-      .get(`/v1/user/self`)
+      .get(`/v2/user/self`)
       .set(
         "Authorization",
         "Basic " +
