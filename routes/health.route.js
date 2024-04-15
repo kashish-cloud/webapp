@@ -1,16 +1,8 @@
 const express = require("express");
-const { Pool } = require("pg");
+const sequelize = require("../db/connection");
 const logger = require("../logger.js");
 
 const router = express.Router();
-
-const pool = new Pool({
-  user: process.env.DBUSER,
-  host: process.env.HOST,
-  database: process.env.DBNAME,
-  password: process.env.DBPASSWORD,
-  port: process.env.DBPORT,
-});
 
 // Handle HEAD request
 router.head("/healthz", (req, res) => {
@@ -26,8 +18,7 @@ router.get("/healthz", async (req, res) => {
   }
 
   try {
-    const client = await pool.connect();
-    client.release();
+    await sequelize.authenticate();
 
     logger.info("Health check successful");
     res

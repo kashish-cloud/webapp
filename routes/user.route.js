@@ -36,10 +36,10 @@ const checkVerificationStatus = async (req, res, next) => {
 };
 
 // Get authenticated user information: GET /user/self
-router.get("/v1/user/self", checkVerificationStatus, userController.getSelf);
+router.get("/v1/user/self", userController.getSelf);
 
 // Update authenticated user information: PUT /user/self
-router.put("/v1/user/self", checkVerificationStatus, userController.updateSelf);
+router.put("/v1/user/self", userController.updateSelf);
 
 // Get user verification status and token expiry time: GET /user/verification-status
 router.get(
